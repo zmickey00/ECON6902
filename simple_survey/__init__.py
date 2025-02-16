@@ -34,7 +34,7 @@ class Player(BasePlayer):
 # PAGES
 class Survey(Page):
     # player variables - so the relevant model is 'player'
-    form_model = 'Player'
+    form_model = 'player'
 
     #we specifically need the names6555
     form_fields = ['Name','Age','Hair_color']
