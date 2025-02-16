@@ -22,8 +22,8 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
     #Name of the Participant
-    name = models.StringField(label="What is your name?")
-    age = models.IntegerField(label="What is your age?",min=13,max=125)
+    Name = models.StringField(label="What is your name?")
+    Age = models.IntegerField(label="What is your age?",min=13,max=125)
     Hair_color = models.StringField(
         label="What is your hair color?",
         choices=['Black', 'Green','White', 'White'],
@@ -32,16 +32,16 @@ class Player(BasePlayer):
 
 
 # PAGES
-class survey(Page):
+class Survey(Page):
     # player variables - so the relevant model is 'player'
-    form_model = 'player'
+    form_model = 'Player'
 
     #we specifically need the names6555
-    form_fields = {'name','Hair_color','age'}
+    form_fields = ['Name','Age','Hair_color']
     pass
 
 class Results(Page):
     pass
 
 
-page_sequence = [survey, Results]
+page_sequence = [Survey, Results]
