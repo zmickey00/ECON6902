@@ -1,0 +1,47 @@
+from otree.api import *
+
+
+doc = """
+Your app description
+"""
+
+
+class C(BaseConstants):
+    NAME_IN_URL = 'simple_survey'
+    PLAYERS_PER_GROUP = None
+    NUM_ROUNDS = 1
+
+
+class Subsession(BaseSubsession):
+    pass
+
+
+class Group(BaseGroup):
+    pass
+
+
+class Player(BasePlayer):
+    #Name of the Participant
+    name = models.StringField(label="What is your name?")
+    age = models.IntegerField(label="What is your age?",min=13,max=125)
+    Hair_color = models.StringField(
+        label="What is your hair color?",
+        choices=['Black', 'Green','White', 'White'],
+    )
+    pass
+
+
+# PAGES
+class survey(Page):
+    # player variables - so the relevant model is 'player'
+    form_model = 'player'
+
+    #we specifically need the names6555
+    form_fields = {'name','Hair_color','age'}
+    pass
+
+class Results(Page):
+    pass
+
+
+page_sequence = [survey, Results]
