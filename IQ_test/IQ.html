@@ -1,0 +1,77 @@
+{{ block title }}
+
+    IQ
+
+{{ endblock }}
+
+{{ block content }}
+
+
+What is 3 times 5?
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Slider with Value Above Thumb</title>
+  <style>
+    .slider-container {
+      position: relative;
+      width: 300px; /* Adjust slider width as needed */
+      margin: 50px;
+    }
+    #slider {
+      width: 100%;
+    }
+    .slider-value {
+      position: absolute;
+      top: -30px;  /* Vertical offset above the slider */
+      left: 50%;   /* This will be updated by JavaScript */
+      transform: translateX(-50%);
+      background: #fff;
+      padding: 2px 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="slider-container">
+    <span id="sliderValue" class="slider-value">50</span>
+    <input type="range" id="slider" name="IQ_Answer" min="0" max="100" value="50" oninput="updateSliderValue(this)">
+  </div>
+
+  <script>
+    function updateSliderValue(slider) {
+      const value = slider.value;
+      const sliderValueElement = document.getElementById('sliderValue');
+      sliderValueElement.textContent = value;
+
+      // Calculate percentage (0 to 1) of the slider's value
+      const percentage = (value - slider.min) / (slider.max - slider.min);
+      // Get the slider width and adjust for thumb size if needed (here approx 20px)
+      const sliderWidth = slider.offsetWidth;
+      const thumbWidth = 20; // Adjust if your slider thumb is a different size
+
+      // Calculate the left offset for the value display
+      const offset = percentage * (sliderWidth - thumbWidth) + thumbWidth / 2;
+      sliderValueElement.style.left = offset + 'px';
+    }
+
+    // Initialize the slider value position on page load
+    document.addEventListener("DOMContentLoaded", function() {
+      updateSliderValue(document.getElementById('slider'));
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+    {{ next_button }}
+{{ endblock }}
+
+
