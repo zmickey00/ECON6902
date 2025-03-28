@@ -12,6 +12,13 @@ SESSION_CONFIGS = [
         app_sequence=['publicgood'],
         num_demo_participants=2,
     ),
+    dict(
+        name='investing_game',
+        display_name="Investing Game",
+        app_sequence=['investing_game'],  # Replace 'game' with your app folder name
+        num_demo_participants=1,
+    ),
+
 ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs
