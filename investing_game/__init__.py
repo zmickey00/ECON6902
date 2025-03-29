@@ -1,6 +1,4 @@
-from otree.api import (
-    BaseSubsession, BaseGroup, BasePlayer, models, widgets, Currency as c,
-)
+from otree.api import *
 import random
 
 doc = """
@@ -12,7 +10,7 @@ class Constants(BaseConstants):
     name_in_url = 'investment_game'
     players_per_group = None
     num_rounds = 1
-    initial_endowment = c(10)
+    initial_endowment = 10
     num_ticks = 20
 
     TREND_DATA = {
