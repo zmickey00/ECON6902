@@ -1,0 +1,13 @@
+{% extends "global/Page.html" %}
+{% load otree_tags %}
+{% block content %}
+  <h3>Round {{ round_number }}: Investment Growth</h3>
+  <p>Your current balance: {{ balance }}</p>
+  <p>Your current investment account: {{ investment_account }}</p>
+  <p>The growth multiplier for this round is: {{ multiplier }}</p>
+  <p>Click "Continue" to apply the multiplier and move to the next round.</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Continue</button>
+  </form>
+{% endblock %}
