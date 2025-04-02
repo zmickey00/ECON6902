@@ -9,7 +9,7 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'IQ_test'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 1
+    NUM_ROUNDS = 2
 
 
 class Subsession(BaseSubsession):
@@ -41,6 +41,8 @@ class Survey(Page):
     form_fields = ['Name', 'Age', 'Hair_color']
     pass
 class IQ(Page):
+
+
     form_model = 'player'
 
     form_fields = ['IQ_Answer']
