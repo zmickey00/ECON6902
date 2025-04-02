@@ -1,0 +1,49 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Period {{ current_tick }} of {{ total_ticks }} - {{ trend_name }}
+{% endblock %}
+
+{% block content %}
+    <div class="card bg-light mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="card-title">Market Information</h5>
+                    <p class="card-text">
+                        Current Price: ${{ current_price }}
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="card-title">Your Account</h5>
+                    <p class="card-text">
+                        Available Balance: ${{ available_balance }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">$</span>
+            </div>
+            {% formfield player.investment %}
+        </div>
+    </div>
+
+    {% next_button %}
+
+    <style>
+        .card {
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        .input-group-text {
+            min-width: 45px;
+            font-weight: bold;
+        }
+    </style>
+{% endblock %}
