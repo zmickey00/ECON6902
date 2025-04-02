@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 import csv
+from scipy.stats import truncnorm
 
 # Uncomment the following line if you experience backend issues (e.g., in PyCharm)
 # matplotlib.use('TkAgg')  # or 'Qt5Agg'
@@ -32,11 +33,25 @@ def simulate_markov_chain(n_ticks, start_price, tick_change):
         prev_state = state
     return prices
 
-
+'''
 # Noise distribution (discrete):
 #   20% chance of ±0.40, 20% chance of ±0.60, 10% chance of ±0.80
 noise_values = [0.40, -0.40, 0.60, -0.60, 0.80, -0.80]
 noise_probs = [0.20, 0.20, 0.20, 0.20, 0.10, 0.10]
+'''
+
+# Truncated normal distribution
+a, b = -0.80, 0.80
+mu, sigma = 0, 1
+trunc_dist = truncnorm(a, b, loc=mu, scale=sigma)
+
+samples = trunc_dist.rvs(1000)
+
+plt.hist(samples, bins=30, density=True, alpha=0.6, color='skyblue', edgecolor='black')
+plt.title("Truncated Normal Distribution")
+plt.xlabel("Value")
+plt.ylabel("Density")
+plt.show()
 
 # Define the detection threshold for observed price movement (per tick)
 trend_threshold = 0.80
@@ -50,7 +65,8 @@ for i in range(1, 7):
     underlying_prices = simulate_markov_chain(n_ticks, start_price, tick_change)
 
     # 2) Sample noise and create the observed price series
-    noise = np.random.choice(noise_values, size=n_ticks, p=noise_probs)
+    # noise = np.random.choice(noise_values, size=n_ticks, p=noise_probs)
+    noise = trunc_dist.rvs(n_ticks)  # Sample from the truncated normal distribution
     observed_prices = [underlying_prices[0]]
     for t in range(1, len(underlying_prices)):
         observed_prices.append(underlying_prices[t] + noise[t - 1])
