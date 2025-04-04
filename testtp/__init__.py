@@ -40,32 +40,40 @@ class Subsession(BaseSubsession):
 
 
 def creating_session(subsession):
-    for player in subsession.get_players():
-        # Only set treatment in round 1
-        if subsession.round_number == 1:
-            # Randomly assign to one of four treatment groups
-            # 1: High frequency, numeric
-            # 2: High frequency, visualized
-            # 3: Low frequency, numeric
-            # 4: Low frequency, visualized
-            player.treatment_group = random.randint(1, 4)
+    if subsession.round_number == 1:
+        players = subsession.get_players()
+        num_players = len(players)
+        
+        participants_per_group = (num_players + 3) // 4
+        
+        # 1: High frequency, numeric
+        # 2: High frequency, visualized
+        # 3: Low frequency, numeric
+        # 4: Low frequency, visualized
+        treatment_groups = []
+        for group_id in range(1, 5):
+            treatment_groups.extend([group_id] * participants_per_group)
             
-            # Set frequency and visualization variables based on treatment group
+        treatment_groups = treatment_groups[:num_players]
+        random.shuffle(treatment_groups)
+        
+        for i, player in enumerate(players):
+            player.treatment_group = treatment_groups[i]
+            
             player.high_frequency = player.treatment_group in [1, 2]
             player.visualized = player.treatment_group in [2, 4]
             
-            # Save to participant.vars for persistence across rounds
             player.participant.vars['treatment_group'] = player.treatment_group
             player.participant.vars['high_frequency'] = player.high_frequency
             player.participant.vars['visualized'] = player.visualized
             player.participant.vars['stocks_owned'] = 0
             player.participant.vars['total_uninvested'] = 0
-        else:
-            # Copy treatment assignment from participant.vars in subsequent rounds
+    
+    else:
+        for player in subsession.get_players():
             player.treatment_group = player.participant.vars['treatment_group']
             player.high_frequency = player.participant.vars['high_frequency']
             player.visualized = player.participant.vars['visualized']
-
 
 class Group(BaseGroup):
     pass
