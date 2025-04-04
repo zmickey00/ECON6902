@@ -1,0 +1,318 @@
+{{ block title }}
+Investment Decision: Round {{ player.round_number }}
+{{ endblock }}
+
+{{ block styles }}
+<style>
+.custom-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 16px;
+    border-radius: 8px;
+    background: #e0e0e0;
+    outline: none;
+}
+
+.custom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 30px;
+    border-radius: 3px;
+    background: #808080;
+    cursor: pointer;
+    border: 1px solid #606060;
+}
+
+.custom-slider::-moz-range-thumb {
+    width: 20px;
+    height: 30px;
+    border-radius: 3px;
+    background: #808080;
+    cursor: pointer;
+    border: 1px solid #606060;
+}
+
+#investment-label {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#endowment-label {
+    color: #888;
+}
+
+.otree-btn-next {
+    background-color: #004080 !important;
+    border-color: #004080 !important;
+    color: #e0e0e0 !important; 
+}
+
+.otree-btn-next:hover {
+    background-color: #0055a5 !important;
+    border-color: #0055a5 !important;
+    color: #e5e5e5 !important;
+}
+</style>
+{{ endblock }}
+
+{{ block content }}
+<div class="card mb-3">
+    <div class="card-header">
+        Stock Price Information
+    </div>
+    <div class="card-body">
+        {% if current_price_disclosed %}
+            <h4>Current Stock Price: ${{ current_price }}</h4>
+        {% else %}
+            <h4>Price not disclosed in this round</h4>
+        {% endif %}
+        
+        <h5 class="mt-4">Price History:</h5>
+        
+        {% if player.visualized %}
+            <div class="text-center">
+                <svg id="price-plot" width="750" height="400" style="border: 1px solid #ddd;"></svg>
+            </div>
+        {% else %}
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Round</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for round_num, price in price_history %}
+                        <tr>
+                            <td>{{ round_num }}</td>
+                            <td>{{ price }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        Investment Decision
+    </div>
+    <div class="card-body">
+        <p class="text-center font-weight-bold">
+            You receive $10 this round. How much would you like to invest in this stock?
+        </p>
+        
+        <div class="mt-4 mb-5">
+            <div style="width: 100%; padding: 0 15px;">
+                <input type="range" class="custom-slider" id="investmentSlider" 
+                       min="0" max="10" step="0.1" value="0">
+                
+                <div class="mt-3 text-center">
+                    <div id="investment-label">
+                        Investment: <span id="investmentAmount">$0</span>
+                    </div>
+                    <div id="endowment-label" class="mt-2">
+                        Endowment: <span id="remainingAmount">$10</span>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="investment" id="id_investment" value="0">
+        </div>
+        
+        <p class="mt-4">
+            <strong>Note:</strong> The amount you invest will be used to purchase stock at the current price 
+            ({% if current_price_disclosed %}${{ current_price }}{% else %}unknown{% endif %}).
+            Your investment cannot be withdrawn until the end of the experiment.
+        </p>
+    </div>
+</div>
+
+{{ next_button }}
+{{ endblock }}
+
+{{ block scripts }}
+<script>
+function updateValues() {
+    var slider = document.getElementById('investmentSlider');
+    var amount = parseFloat(slider.value);
+    var remaining = 10 - amount;
+    var percent = amount * 10;
+    
+    document.getElementById('investmentAmount').textContent = '$' + amount.toFixed(1);
+    document.getElementById('remainingAmount').textContent = '$' + remaining.toFixed(1);
+    document.getElementById('id_investment').value = amount;
+    
+    slider.style.background = 'linear-gradient(to right, #004080 ' + percent + '%, #e0e0e0 ' + percent + '%)';
+}
+
+document.getElementById('investmentSlider').oninput = updateValues;
+
+window.onload = function() {
+    var formValue = parseFloat(document.getElementById('id_investment').value) || 0;
+    var slider = document.getElementById('investmentSlider');
+    slider.value = formValue;
+    updateValues();
+    
+    {% if player.visualized %}
+    renderChart();
+    {% endif %}
+};
+
+{% if player.visualized %}
+function renderChart() {
+    var svg = document.getElementById('price-plot');
+    var prices = {{ prices_json|safe }};
+    var rounds = {{ rounds_json|safe }};
+    var disclosed = {{ disclosed_json|safe }};
+    
+    // Clear SVG
+    while(svg.firstChild) {
+        svg.removeChild(svg.firstChild);
+    }
+    
+    var width = svg.width.baseVal.value;
+    var height = svg.height.baseVal.value;
+    var padding = { top: 40, right: 50, bottom: 60, left: 70 };
+    
+    // Helper functions
+    function xScale(round) {
+        return ((round - 0) / 21) * (width - padding.left - padding.right) + padding.left;
+    }
+    
+    function yScale(price) {
+        return height - padding.bottom - ((price - 5) / 8) * (height - padding.top - padding.bottom);
+    }
+    
+    // Draw axes
+    var xAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    xAxis.setAttribute("x1", padding.left);
+    xAxis.setAttribute("y1", height - padding.bottom);
+    xAxis.setAttribute("x2", width - padding.right);
+    xAxis.setAttribute("y2", height - padding.bottom);
+    xAxis.setAttribute("stroke", "black");
+    svg.appendChild(xAxis);
+    
+    var yAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    yAxis.setAttribute("x1", padding.left);
+    yAxis.setAttribute("y1", padding.top);
+    yAxis.setAttribute("x2", padding.left);
+    yAxis.setAttribute("y2", height - padding.bottom);
+    yAxis.setAttribute("stroke", "black");
+    svg.appendChild(yAxis);
+    
+    // Draw grid lines
+    for (var r = 1; r <= 20; r++) {
+        var x = xScale(r);
+        var gridLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        gridLine.setAttribute("x1", x);
+        gridLine.setAttribute("y1", padding.top);
+        gridLine.setAttribute("x2", x);
+        gridLine.setAttribute("y2", height - padding.bottom);
+        gridLine.setAttribute("stroke", "#f0f0f0");
+        svg.appendChild(gridLine);
+        
+        // X-axis tick
+        var tick = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        tick.setAttribute("x1", x);
+        tick.setAttribute("y1", height - padding.bottom);
+        tick.setAttribute("x2", x);
+        tick.setAttribute("y2", height - padding.bottom + 5);
+        tick.setAttribute("stroke", "black");
+        svg.appendChild(tick);
+        
+        // X-axis label
+        var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        label.setAttribute("x", x);
+        label.setAttribute("y", height - padding.bottom + 20);
+        label.setAttribute("text-anchor", "middle");
+        label.setAttribute("font-size", "12px");
+        label.textContent = r;
+        svg.appendChild(label);
+    }
+    
+    // Y-axis ticks and grid
+    for (var p = 6; p <= 12; p++) {
+        var y = yScale(p);
+        
+        // Grid line
+        var gridLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        gridLine.setAttribute("x1", padding.left);
+        gridLine.setAttribute("y1", y);
+        gridLine.setAttribute("x2", width - padding.right);
+        gridLine.setAttribute("y2", y);
+        gridLine.setAttribute("stroke", "#e5e5e5");
+        gridLine.setAttribute("stroke-dasharray", "3,3");
+        svg.appendChild(gridLine);
+        
+        // Y-axis tick
+        var tick = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        tick.setAttribute("x1", padding.left - 5);
+        tick.setAttribute("y1", y);
+        tick.setAttribute("x2", padding.left);
+        tick.setAttribute("y2", y);
+        tick.setAttribute("stroke", "black");
+        svg.appendChild(tick);
+        
+        // Y-axis label
+        var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        label.setAttribute("x", padding.left - 10);
+        label.setAttribute("y", y + 4);
+        label.setAttribute("text-anchor", "end");
+        label.setAttribute("font-size", "12px");
+        label.textContent = "$" + p;
+        svg.appendChild(label);
+    }
+    
+    // Axis labels
+    var xLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    xLabel.setAttribute("x", width / 2);
+    xLabel.setAttribute("y", height - 15);
+    xLabel.setAttribute("text-anchor", "middle");
+    xLabel.setAttribute("font-size", "16px");
+    xLabel.setAttribute("font-weight", "bold");
+    xLabel.textContent = "Round";
+    svg.appendChild(xLabel);
+    
+    var yLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    yLabel.setAttribute("x", 20);
+    yLabel.setAttribute("y", height / 2);
+    yLabel.setAttribute("text-anchor", "middle");
+    yLabel.setAttribute("font-size", "16px");
+    yLabel.setAttribute("font-weight", "bold");
+    yLabel.setAttribute("transform", "rotate(-90, 20, " + (height/2) + ")");
+    yLabel.textContent = "Stock Price ($)";
+    svg.appendChild(yLabel);
+    
+    // Plot data points
+    for (var i = 0; i < prices.length; i++) {
+        if (!disclosed[i]) continue;
+        
+        var price = prices[i];
+        var round = rounds[i];
+        var x = xScale(round);
+        var y = yScale(price);
+        
+        // Draw dot
+        var dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        dot.setAttribute("cx", x);
+        dot.setAttribute("cy", y);
+        dot.setAttribute("r", 6);
+        dot.setAttribute("fill", "#004080"); // 普鲁士蓝
+        dot.setAttribute("stroke", "#003366");
+        dot.setAttribute("stroke-width", "1");
+        svg.appendChild(dot);
+        
+        // Price label
+        var priceLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        priceLabel.setAttribute("x", x);
+        priceLabel.setAttribute("y", y - 10);
+        priceLabel.setAttribute("text-anchor", "middle");
+        priceLabel.setAttribute("font-size", "11px");
+        priceLabel.textContent = "$" + price.toFixed(1);
+        svg.appendChild(priceLabel);
+    }
+}
+{% endif %}
+</script>
+{{ endblock }}

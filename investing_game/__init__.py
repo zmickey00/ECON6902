@@ -7,7 +7,7 @@ Stock market investment game with hardcoded trends
 
 
 class Constants(BaseConstants):
-    name_in_url = 'investment_game'
+    name_in_url = 'invest_game'
     players_per_group = None
     num_rounds = 1
     initial_endowment = 10

@@ -25,6 +25,13 @@ SESSION_CONFIGS = [
         num_demo_participants=1,
     ),
 
+    dict(
+        name='testtp',
+        display_name="Test TP",
+        app_sequence=['testtp'],  # Replace 'game' with your app folder name
+        num_demo_participants=8,
+    ),
+
 ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs

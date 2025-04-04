@@ -1,0 +1,74 @@
+{{ block styles }}
+<style>
+    .otree-btn-next {
+        background-color: #004080 !important;
+        border-color: #004080 !important;
+        color: #e0e0e0 !important; 
+    }
+
+    .otree-btn-next:hover {
+        background-color: #0055a5 !important;
+        border-color: #0055a5 !important;
+        color: #e5e5e5 !important;
+    }
+</style>
+{{ endblock }}
+
+{{ block title }}
+    Investment Decision Experiment: Introduction
+{{ endblock }}
+
+{{ block content }}
+
+<div class="card mb-3">
+    <div class="card-header">
+        Experiment Instructions
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Welcome to the Investment Decision Experiment</h5>
+        
+        <p>In this experiment, you will make investment decisions over 20 rounds.</p>
+        
+        <p><strong>Basic Rules:</strong></p>
+        <ul>
+            <li>You will receive $10 of initial capital in each round.</li>
+            <li>You will decide how much to invest in a stock based on price information.</li>
+            <li>The money you invest cannot be withdrawn until the end of the experiment.</li>
+            <li>Remaining balance from the previous round cannot be carried over.</li>
+            <li>At the end, your total earnings will be the sum of all uninvested money plus the value of your stock holdings at the final price.</li>
+        </ul>
+        
+        <p><strong>Information Disclosure:</strong></p>
+        {% if high_frequency %}
+        <p>You will see the stock price in every round.</p>
+        {% else %}
+        <p>You will only see the stock price in rounds {{ disclosure_rounds_text }}.</p>
+        {% endif %}
+        
+        <p><strong>Price Presentation:</strong></p>
+        {% if visualized %}
+        <p>You will see visual stock prices.</p>
+        {% else %}
+        <p>You will see numeric stock prices.</p>
+        {% endif %}
+        
+        <p class="font-weight-bold text-danger">Please read these instructions carefully. The next button will appear after 20 seconds.</p>
+    </div>
+</div>
+
+<div id="next-button" style="display:none;">
+    {{ next_button }}
+</div>
+
+{{ endblock }}
+
+{{ block scripts }}
+<script>
+    // Hide the next button for specified time
+    window.onload = function() {
+        setTimeout(function() {
+            document.getElementById("next-button").style.display = "block";
+        }, 20000);
+    };
+</script>
+{{ endblock }}
