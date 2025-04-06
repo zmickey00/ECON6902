@@ -1,0 +1,105 @@
+{{ block title }}
+    Investment Decision Experiment: Introduction
+{{ endblock }}
+
+{{ block styles }}
+<style>
+    .otree-btn-next {
+        background-color: #004080 !important;
+        border-color: #004080 !important;
+        color: #e0e0e0 !important;
+    }
+
+    .otree-btn-next:hover {
+        background-color: #0055a5 !important;
+        border-color: #0055a5 !important;
+    }
+    
+    .instruction-card {
+        margin-bottom: 20px;
+    }
+    
+    .instruction-section {
+        margin-bottom: 15px;
+    }
+    
+    .wait-notice {
+        color: #dc3545;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+</style>
+{{ endblock }}
+
+{{ block content }}
+
+<div class="card instruction-card">
+    <div class="card-header">
+        Experiment Instructions
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Welcome to the Investment Decision Experiment</h5>
+        
+        <div class="instruction-section">
+            <p>In this experiment, you will make investment decisions over 20 rounds.</p>
+        </div>
+        
+        <div class="instruction-section">
+            <p><strong>Basic Rules:</strong></p>
+            <ul>
+                <li>You will receive $10 of initial funds in the first round.</li>
+                <li>In each round, you decide how much to invest in a stock based on price information.</li>
+                <li>The invested money will fluctuate with stock price changes.</li>
+                <li>Your remaining funds stay the same and carry over to the next round.</li>
+                <li>In subsequent rounds, your available funds will consist of your previous round's remaining funds plus the current value of your previous investment.</li>
+                <li>At the end, your total return will be the sum of your remaining funds and the value of your stock holdings at the final price.</li>
+            </ul>
+        </div>
+        
+        <div class="instruction-section">
+            <p><strong>Information Disclosure:</strong></p>
+            {% if high_frequency %}
+            <p>You will see the stock price in every round.</p>
+            {% else %}
+            <p>You will only see the stock price in rounds {{ disclosure_rounds_text }}.</p>
+            {% endif %}
+        </div>
+        
+        <div class="instruction-section">
+            <p><strong>Price Presentation:</strong></p>
+            {% if visualized %}
+            <p>You will see both numeric stock prices and a visual representation.</p>
+            {% else %}
+            <p>You will see only numeric stock prices.</p>
+            {% endif %}
+        </div>
+        
+        <p class="wait-notice">Please read these instructions carefully. The next button will appear after 20 seconds.</p>
+    </div>
+</div>
+
+<div id="next-button" style="display:none;">
+    {{ next_button }}
+</div>
+
+{{ endblock }}
+
+{{ block scripts }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Page loaded, waiting for " + js_vars.wait_time + " seconds");
+        
+        var nextButton = document.getElementById("next-button");
+        if (nextButton) {
+            nextButton.style.display = "none";
+            
+            setTimeout(function() {
+                console.log("Wait time completed, showing button");
+                nextButton.style.display = "block";
+            }, js_vars.wait_time * 1000);
+        } else {
+            console.error("Could not find next-button element");
+        }
+    });
+</script>
+{{ endblock }}

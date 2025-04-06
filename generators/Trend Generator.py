@@ -9,8 +9,8 @@ from scipy.stats import truncnorm
 
 # --- Simulation Parameters ---
 n_ticks = 20
-start_price = 10.0
-tick_change = 0.50
+start_price = 1
+tick_change = 0.05
 
 
 # Transition probabilities for the Markov chain:
@@ -41,11 +41,11 @@ noise_probs = [0.20, 0.20, 0.20, 0.20, 0.10, 0.10]
 '''
 
 # Truncated normal distribution
-a, b = -0.80, 0.80
+a, b = -0.05, 0.05
 mu, sigma = 0, 1
 trunc_dist = truncnorm(a, b, loc=mu, scale=sigma)
 
-samples = trunc_dist.rvs(1000)
+samples = trunc_dist.rvs(5000)
 
 plt.hist(samples, bins=30, density=True, alpha=0.6, color='skyblue', edgecolor='black')
 plt.title("Truncated Normal Distribution")

@@ -1,5 +1,5 @@
 {{ block title }}
-Investment Decision: Round {{ player.round_number }}
+    Investment Decision: Session {{ session_num }}/Round {{ round_in_session }}
 {{ endblock }}
 
 {{ block styles }}
@@ -41,39 +41,109 @@ Investment Decision: Round {{ player.round_number }}
     color: #888;
 }
 
+/* Modify Next button style */
 .otree-btn-next {
     background-color: #004080 !important;
     border-color: #004080 !important;
-    color: #e0e0e0 !important; 
+    color: #e0e0e0 !important;
 }
 
 .otree-btn-next:hover {
     background-color: #0055a5 !important;
     border-color: #0055a5 !important;
-    color: #e5e5e5 !important;
+    color: #ffffff !important;
+}
+
+.funds-display {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border-left: 4px solid #004080;
+}
+
+.funds-breakdown {
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+    padding: 8px 15px;
+    border-radius: 5px;
+    background-color: #f1f3f5;
+}
+
+.primary-funds {
+    font-weight: bold;
+    color: #004080;
+}
+
+.price-disclosure {
+    font-size: 1.2rem;
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+.price-disclosure.disclosed {
+    border-left: 4px solid #28a745;
+}
+
+.price-disclosure.not-disclosed {
+    border-left: 4px solid #dc3545;
+}
+
+.blocked-message {
+    padding: 15px;
+    background-color: #f8d7da;
+    border-left: 4px solid #dc3545;
+    color: #721c24;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.session-info {
+    margin-bottom: 15px;
+    color: #666;
+}
+
+.session-info span {
+    font-weight: bold;
+    color: #004080;
 }
 </style>
 {{ endblock }}
 
 {{ block content }}
+
+<div class="session-info">
+    <p>Total progress: <span>{{ session_num }}</span> of <span>{{ total_sessions }}</span> sessions</p>
+</div>
+
 <div class="card mb-3">
     <div class="card-header">
         Stock Price Information
     </div>
     <div class="card-body">
         {% if current_price_disclosed %}
-            <h4>Current Stock Price: ${{ current_price }}</h4>
+            <div class="price-disclosure disclosed">
+                <strong>Current Stock Price:</strong> ${{ current_price }}
+            </div>
         {% else %}
-            <h4>Price not disclosed in this round</h4>
+            <div class="price-disclosure not-disclosed">
+                <strong>Price not disclosed in this round</strong>
+            </div>
         {% endif %}
         
         <h5 class="mt-4">Price History:</h5>
         
         {% if player.visualized %}
+            <!-- Dot plot visualization for visualized groups -->
             <div class="text-center">
                 <svg id="price-plot" width="750" height="400" style="border: 1px solid #ddd;"></svg>
             </div>
         {% else %}
+            <!-- Numeric price list only for non-visualized groups -->
             <table class="table table-sm">
                 <thead>
                     <tr>
@@ -99,32 +169,63 @@ Investment Decision: Round {{ player.round_number }}
         Investment Decision
     </div>
     <div class="card-body">
-        <p class="text-center font-weight-bold">
-            You receive $10 this round. How much would you like to invest in this stock?
-        </p>
-        
-        <div class="mt-4 mb-5">
-            <div style="width: 100%; padding: 0 15px;">
-                <input type="range" class="custom-slider" id="investmentSlider" 
-                       min="0" max="10" step="0.1" value="0">
-                
-                <div class="mt-3 text-center">
-                    <div id="investment-label">
-                        Investment: <span id="investmentAmount">$0</span>
-                    </div>
-                    <div id="endowment-label" class="mt-2">
-                        Endowment: <span id="remainingAmount">$10</span>
+        {% if not current_price_disclosed %}
+            <!-- Content displayed when the price is not disclosed -->
+            {% if player.round_number > 1 %}
+                <div class="funds-breakdown">
+                    <strong>Remaining Funds from Last Round:</strong> ${{ previous_remaining_funds }}
+                </div>
+            {% endif %}
+            
+            <div class="blocked-message mt-3">
+                <strong>Oops!</strong> You can't do anything because the stock market news is blocked. Just click the Next button.
+            </div>
+            
+            <!-- Hidden investment input, automatically set to the current stock value -->
+            <input type="hidden" name="investment" id="id_investment" value="{{ previous_investment_value }}">
+            
+        {% else %}
+            <!-- Content displayed when the price is disclosed -->
+            {% if player.round_number > 1 %}
+                <div class="funds-breakdown">
+                    <strong>Value of Stock Holdings:</strong> ${{ previous_investment_value }}
+                </div>
+                <div class="funds-breakdown">
+                    <strong>Remaining Funds from Last Round:</strong> ${{ previous_remaining_funds }}
+                </div>
+            {% endif %}
+            
+            <div class="funds-display">
+                <strong class="primary-funds">Available Funds This Round:</strong> ${{ available_funds }}
+            </div>
+            
+            <p class="text-center font-weight-bold">
+                How much would you like to invest in this stock?
+            </p>
+            
+            <div class="mt-4 mb-5">
+                <div style="width: 100%; padding: 0 15px;">
+                    <input type="range" class="custom-slider" id="investmentSlider" 
+                           min="0" max="{{ available_funds }}" step="0.01" value="0">
+                    
+                    <div class="mt-3 text-center">
+                        <div id="investment-label">
+                            Investment: <span id="investmentAmount">$0.00</span>
+                        </div>
+                        <div id="endowment-label" class="mt-2">
+                            Remaining Funds: <span id="remainingAmount">${{ available_funds }}</span>
+                        </div>
                     </div>
                 </div>
+                <input type="hidden" name="investment" id="id_investment" value="0">
             </div>
-            <input type="hidden" name="investment" id="id_investment" value="0">
-        </div>
-        
-        <p class="mt-4">
-            <strong>Note:</strong> The amount you invest will be used to purchase stock at the current price 
-            ({% if current_price_disclosed %}${{ current_price }}{% else %}unknown{% endif %}).
-            Your investment cannot be withdrawn until the end of the experiment.
-        </p>
+            
+            <p class="mt-4">
+                <strong>Note:</strong> The amount you invest will change with the stock price. 
+                Your remaining funds will stay the same and carry over to the next round.
+                Current stock price: ${{ current_price }}.
+            </p>
+        {% endif %}
     </div>
 </div>
 
@@ -133,14 +234,16 @@ Investment Decision: Round {{ player.round_number }}
 
 {{ block scripts }}
 <script>
+{% if current_price_disclosed %}
 function updateValues() {
     var slider = document.getElementById('investmentSlider');
     var amount = parseFloat(slider.value);
-    var remaining = 10 - amount;
-    var percent = amount * 10;
+    var totalFunds = parseFloat({{ available_funds }});
+    var remaining = totalFunds - amount;
+    var percent = (amount / totalFunds) * 100;
     
-    document.getElementById('investmentAmount').textContent = '$' + amount.toFixed(1);
-    document.getElementById('remainingAmount').textContent = '$' + remaining.toFixed(1);
+    document.getElementById('investmentAmount').textContent = '$' + amount.toFixed(2);
+    document.getElementById('remainingAmount').textContent = '$' + remaining.toFixed(2);
     document.getElementById('id_investment').value = amount;
     
     slider.style.background = 'linear-gradient(to right, #004080 ' + percent + '%, #e0e0e0 ' + percent + '%)';
@@ -158,6 +261,13 @@ window.onload = function() {
     renderChart();
     {% endif %}
 };
+{% else %}
+window.onload = function() {
+    {% if player.visualized %}
+    renderChart();
+    {% endif %}
+};
+{% endif %}
 
 {% if player.visualized %}
 function renderChart() {
@@ -181,7 +291,7 @@ function renderChart() {
     }
     
     function yScale(price) {
-        return height - padding.bottom - ((price - 5) / 8) * (height - padding.top - padding.bottom);
+        return height - padding.bottom - ((price - -0.1) / 2.4) * (height - padding.top - padding.bottom);
     }
     
     // Draw axes
@@ -232,7 +342,7 @@ function renderChart() {
     }
     
     // Y-axis ticks and grid
-    for (var p = 6; p <= 12; p++) {
+    for (var p = 0; p <= 2.2; p += 0.2) {
         var y = yScale(p);
         
         // Grid line
@@ -260,7 +370,7 @@ function renderChart() {
         label.setAttribute("y", y + 4);
         label.setAttribute("text-anchor", "end");
         label.setAttribute("font-size", "12px");
-        label.textContent = "$" + p;
+        label.textContent = "$" + parseFloat(p.toFixed(2));
         svg.appendChild(label);
     }
     
@@ -298,7 +408,7 @@ function renderChart() {
         dot.setAttribute("cx", x);
         dot.setAttribute("cy", y);
         dot.setAttribute("r", 6);
-        dot.setAttribute("fill", "#004080"); // 普鲁士蓝
+        dot.setAttribute("fill", "#004080"); // Prussian blue
         dot.setAttribute("stroke", "#003366");
         dot.setAttribute("stroke-width", "1");
         svg.appendChild(dot);
@@ -309,7 +419,7 @@ function renderChart() {
         priceLabel.setAttribute("y", y - 10);
         priceLabel.setAttribute("text-anchor", "middle");
         priceLabel.setAttribute("font-size", "11px");
-        priceLabel.textContent = "$" + price.toFixed(1);
+        priceLabel.textContent = "$" + price.toFixed(2);
         svg.appendChild(priceLabel);
     }
 }

@@ -2,36 +2,12 @@ from os import environ
 
 SESSION_CONFIGS = [
     dict(
-        name='IQ_test',
-        app_sequence=['IQ_test'],
-        num_demo_participants=3,
-    ),
-
-    dict(
-        name='game',
-        app_sequence=['game'],
-        num_demo_participants=1,
-    ),
-
-    dict(
-        name='Public_Goods_Game',
-        app_sequence=['publicgood'],
-        num_demo_participants=2,
-    ),
-    dict(
-        name='investing_game',
-        display_name="Investing Game",
-        app_sequence=['investing_game'],  # Replace 'game' with your app folder name
-        num_demo_participants=1,
-    ),
-
-    dict(
-        name='testtp',
-        display_name="Test TP",
-        app_sequence=['testtp'],  # Replace 'game' with your app folder name
+        name='investment_decision',
+        display_name="Investment Decision",
+        app_sequence=['investment_decision'],  # Replace 'game' with your app folder name
         num_demo_participants=8,
+        num_rounds=80,
     ),
-
 ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs

@@ -1,9 +1,0 @@
-{% extends "global/Page.html" %}
-{% load otree_tags %}
-{% block content %}
-    <p>Your balance is: {{ player.balance }}</p>
-    <form method="post">
-        {{ form.investment.label }}: {{ form.investment }}
-        <button type="submit">Invest</button>
-    </form>
-{% endblock %}

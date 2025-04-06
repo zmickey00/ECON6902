@@ -1,0 +1,116 @@
+{{ block title }}
+    Experiment Completed
+{{ endblock }}
+
+{{ block styles }}
+<style>
+    .otree-btn-next {
+        background-color: #004080 !important;
+        border-color: #004080 !important;
+        color: #e0e0e0 !important;
+    }
+
+    .otree-btn-next:hover {
+        background-color: #0055a5 !important;
+        border-color: #0055a5 !important;
+        color: #ffffff !important;
+    }
+    
+    .completed-card {
+        max-width: 800px;
+        margin: 0 auto;
+        margin-top: 50px;
+    }
+    
+    .thank-you {
+        text-align: center;
+        margin: 40px 0;
+    }
+    
+    .thank-you h2 {
+        color: #004080;
+        margin-bottom: 20px;
+    }
+    
+    .thank-you p {
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+    }
+    
+    .total-earnings {
+        background-color: #f0f7ff;
+        border-left: 5px solid #28a745;
+        padding: 20px;
+        margin: 30px 0;
+        text-align: center;
+        border-radius: 5px;
+    }
+    
+    .total-earnings-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #28a745;
+        display: block;
+        margin: 10px 0;
+    }
+    
+    .session-results {
+        margin: 30px 0;
+    }
+    
+    .session-item {
+        background-color: #f8f9fa;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        border-left: 4px solid #004080;
+    }
+    
+    .session-item h5 {
+        margin-bottom: 10px;
+        color: #004080;
+    }
+    
+    .completed-icon {
+        font-size: 4rem;
+        color: #28a745;
+        margin-bottom: 20px;
+    }
+</style>
+{{ endblock }}
+
+{{ block content }}
+
+<div class="card completed-card">
+    <div class="card-header">
+        <h3>Experiment Completed</h3>
+    </div>
+    <div class="card-body">
+        <div class="thank-you">
+            <div class="completed-icon">✓</div>
+            <h2>Thank You for Participating!</h2>
+            <p>You have successfully completed all four experiments.</p>
+            <p>Your participation and decision-making have provided valuable data for our research.</p>
+        </div>
+        
+        <div class="total-earnings">
+            <h4>Your Average Earnings Across All Experiments:</h4>
+            <span class="total-earnings-value">${{ total_earnings }}</span>
+        </div>
+        
+        <div class="session-results">
+            <h4>Results by Experiment:</h4>
+            
+            {% for result in session_results %}
+            <div class="session-item">
+                <h5>Experiment {{ result.session_num }}</h5>
+                <p><strong>Total Return:</strong> ${{ result.total_return }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{{ next_button }}
+
+{{ endblock }}
