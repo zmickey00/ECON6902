@@ -17,7 +17,6 @@
     }
     
     .completed-card {
-        max-width: 800px;
         margin: 0 auto;
         margin-top: 50px;
     }
@@ -91,6 +90,36 @@
         color: #28a745;
         margin-bottom: 10px;
     }
+    
+    .reward-calculation {
+        margin: 20px auto;
+        max-width: 350px;
+    }
+    
+    .reward-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .reward-table tr {
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .reward-table tr.total-row {
+        border-top: 2px solid #28a745;
+        border-bottom: none;
+        font-weight: bold;
+        font-size: 1.1em;
+    }
+    
+    .reward-table td {
+        padding: 8px 5px;
+    }
+    
+    .reward-table td.amount {
+        text-align: right;
+        font-weight: bold;
+    }
 </style>
 {{ endblock }}
 
@@ -111,6 +140,22 @@
         <div class="selected-reward">
             <h4>Your Reward</h4>
             <p>One of your experiment earnings has been randomly selected as your reward.</p>
+            <div class="reward-calculation">
+                <table class="reward-table">
+                    <tr>
+                        <td>Experiment Reward:</td>
+                        <td class="amount">${{ selected_reward }}</td>
+                    </tr>
+                    <tr>
+                        <td>Show-up Fee:</td>
+                        <td class="amount">${{ show_up_fee }}</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>Total Payment:</td>
+                        <td class="amount">${{ total_payment }}</td>
+                    </tr>
+                </table>
+            </div>
         </div>
         
         <div class="session-results">

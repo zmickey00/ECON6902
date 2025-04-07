@@ -542,9 +542,19 @@ class FinalPage(Page):
         # Randomly select one session for the reward
         selected_session = random.randint(1, Constants.num_sessions)
         
+        # Get the selected reward value
+        selected_reward = float(session_results[selected_session-1]['total_return'])
+        
+        # Calculate total payment (selected reward + $5 show-up fee)
+        show_up = 5.00
+        total_payment = selected_reward + show_up
+        
         return {
             'session_results': session_results,
-            'selected_session': selected_session
+            'selected_session': selected_session,
+            'selected_reward': f"{selected_reward:.2f}",
+            'show_up_fee': f"{show_up:.2f}",
+            'total_payment': f"{total_payment:.2f}"
         }
 
 
