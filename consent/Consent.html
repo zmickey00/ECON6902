@@ -15,102 +15,109 @@
         border-color: #0055a5 !important;
         color: #ffffff !important;
     }
-
-    .card {
-        margin-top: 30px;
-        padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-        max-width: 800px;
+    
+    .consent-card {
+        margin-bottom: 20px;
     }
-
-    .card-header {
-        font-size: 1.5em;
-        font-weight: bold;
-        background-color: #f7f7f7;
-        padding-bottom: 10px;
-        margin-bottom: 15px;
-        border-bottom: 1px solid #ccc;
-    }
-
+    
     .instruction-section {
         margin-bottom: 20px;
     }
-
-    .pn_buttons {
+    
+    .consent-buttons {
         margin-top: 30px;
+        display: flex;
+        justify-content: space-between;
     }
-
-    .button {
-        margin: 5px;
-        padding: 10px 20px;
-        font-size: 16px;
+    
+    .btn-consent {
+        background-color: #004080 !important;
+        border-color: #004080 !important;
+        color: #e0e0e0 !important;
+        padding: 6px 12px;
+        font-size: 1rem;
+        border-radius: 4px;
+    }
+    
+    .btn-consent:hover {
+        background-color: #0055a5 !important;
+        border-color: #0055a5 !important;
+        color: #ffffff !important;
+    }
+    
+    .btn-exit {
+        background-color: #dc3545 !important;
+        border-color: #dc3545 !important;
+        color: #e0e0e0 !important;
+        padding: 6px 12px;
+        font-size: 1rem;
+        border-radius: 4px;
+    }
+    
+    .btn-exit:hover {
+        background-color: #e74c3c !important;
+        border-color: #e74c3c !important;
+        color: #ffffff !important;
     }
 </style>
 {{ endblock }}
 
 {{ block content }}
 
-<center>
-    <div class="card">
-        <div class="card-header">Welcome Agreement</div>
-        <div class="card-body">
+<div class="card consent-card">
+    <div class="card-header">
+        <h3>Welcome Agreement</h3>
+    </div>
+    <div class="card-body">
+        <div class="instruction-section">
+            <strong>Principal Investigator:</strong> Thomas Ge; Mickey Zhang
+        </div>
 
-            <div class="instruction-section">
-                <strong>Principal Investigator:</strong> Thomas Ge; Mickey Zhang
-            </div>
+        <div class="instruction-section">
+            <strong>Welcome</strong><br>
+            We are pleased to invite you to contribute to this experimental economics research studying investors' behavior in financial markets. Participation is voluntary. Please review the information below. By continuing, you give your consent to participate.
+        </div>
 
-            <div class="instruction-section">
-                <strong>Welcome</strong><br>
-                We are pleased to invite you to contribute to this experimental economics research studying investors’ behavior in financial markets. Participation is voluntary. Please review the information below. By continuing, you give your consent to participate.
-            </div>
+        <div class="instruction-section">
+            <strong>Your Tasks</strong><br>
+            You will sit at a computer and make a series of financial decisions. Your decisions may affect your earnings. Full instructions will be provided before you begin.
+        </div>
 
-            <div class="instruction-section">
-                <strong>Your Tasks</strong><br>
-                You will sit at a computer and make a series of financial decisions. Your decisions may affect your earnings. Full instructions will be provided before you begin.
-            </div>
+        <div class="instruction-section">
+            <strong>Risk Disclosure</strong><br>
+            There are no foreseeable risks or disadvantages associated with your participation.
+        </div>
 
-            <div class="instruction-section">
-                <strong>Risk Disclosure</strong><br>
-                There are no foreseeable risks or disadvantages associated with your participation.
-            </div>
+        <div class="instruction-section">
+            <strong>Your Benefit / Compensation</strong><br>
+            You will receive a show-up fee plus potential extra compensation depending on your decisions in the experiment.
+        </div>
 
-            <div class="instruction-section">
-                <strong>Your Benefit / Compensation</strong><br>
-                You will receive a show-up fee plus potential extra compensation depending on your decisions in the experiment.
-            </div>
+        <div class="instruction-section">
+            <strong>Confidentiality Agreement & Data Usage</strong><br>
+            All data collected is for academic research purposes and will remain confidential. You will remain anonymous in all reports and publications.
+        </div>
 
-            <div class="instruction-section">
-                <strong>Confidentiality Agreement & Data Usage</strong><br>
-                All data collected is for academic research purposes and will remain confidential. You will remain anonymous in all reports and publications.
-            </div>
+        <div class="instruction-section">
+            <strong>Contacts</strong><br>
+            Mickey Zhang - zz393@duke.edu<br>
+            Thomas Ge - yg261@duke.edu<br>
+        </div>
 
-            <div class="instruction-section">
-                <strong>Contacts</strong><br>
-                Mickey Zhang - zz393@duke.edu<br>
-                Thomas Ge - yg261@duke.edu<br>
-            </div>
-
-            <div class="instruction-section">
-                <strong>Summary</strong><br>
-                I understand the information that was presented and that:<br>
-                - My participation is voluntary.<br>
-                - Refusal to participate will involve no penalty.<br>
-                - I may discontinue participation at any time.<br>
-                - I hereby give my consent to be the subject of the research.
-            </div>
-
+        <div class="instruction-section">
+            <strong>Summary</strong><br>
+            I understand the information that was presented and that:<br>
+            - My participation is voluntary.<br>
+            - Refusal to participate will involve no penalty.<br>
+            - I may discontinue participation at any time.<br>
+            - I hereby give my consent to be the subject of the research.
         </div>
     </div>
-</center>
+</div>
 
-<center>
-    <div class="pn_buttons">
-        <div><button class="button" name="consent" value="True">I Consent</button></div>
-        <div></div>
-        <div><button class="button" name="consent" value="False">Exit Session</button></div>
-    </div>
-</center>
+<div class="consent-buttons">
+    <button class="btn btn-consent" name="consent" value="True">I Consent</button>
+    <button class="btn btn-exit" name="consent" value="False">Exit Session</button>
+</div>
 
 {{ endblock }}

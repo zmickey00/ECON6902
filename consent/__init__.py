@@ -53,4 +53,4 @@ class Results(Page):
     pass
 
 
-page_sequence = [Consent, No_Consent, Instructions]
+page_sequence = [Consent, No_Consent]

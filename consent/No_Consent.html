@@ -1,16 +1,110 @@
-{{ block title }}<center><p>Study Ended</p> <p style="color:#ababab; font-size:20px"></p></center>{{ endblock }}
+{{ block title }}
+    Experiment Ended
+{{ endblock }}
+
+{{ block styles }}
+<style>
+    .rest-card {
+        max-width: 800px;
+        margin: 0 auto;
+        margin-top: 50px;
+        text-align: center;
+    }
+    
+    .progress-container {
+        margin-top: 30px;
+        margin-bottom: 20px;
+        height: 30px;
+        background-color: #f5f5f5;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    
+    .progress-bar {
+        height: 100%;
+        background-color: #dc3545;
+        width: 0%;
+        transition: width 0.1s linear;
+    }
+    
+    .countdown {
+        font-size: 48px;
+        font-weight: bold;
+        margin: 30px 0;
+        color: #dc3545;
+    }
+    
+    .rest-message {
+        font-size: 20px;
+        margin-bottom: 30px;
+    }
+</style>
+{{ endblock }}
+
 {{ block content }}
 
-
-<center>
-    <div class="questionCard" style="display: block;">
-        <br><br><br><br><br><br><br><br><br>
-            <center>
-                Since you did not consent to the consent form this study has ended.
-            </center>
+<div class="card rest-card">
+    <div class="card-header">
+        <h3>Experiment Ended</h3>
     </div>
-</center>
-
+    <div class="card-body">
+        <div class="rest-message">
+            <p>Since you did not consent to the consent form, this study has ended.</p>
+            <p>This page will automatically close in:</p>
+        </div>
+        
+        <div class="countdown" id="countdown">8</div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <p>Thank you for your interest in our research.</p>
+    </div>
+</div>
 
 {{ endblock }}
 
+{{ block scripts }}
+<script>
+    // Set up automatic countdown and progress bar
+    document.addEventListener('DOMContentLoaded', function() {
+        var waitTime = 8;
+        var remainingTime = waitTime;
+        var progressBar = document.getElementById('progress-bar');
+        var countdown = document.getElementById('countdown');
+        
+        // Ensure required elements exist
+        if (!progressBar || !countdown) {
+            console.error("Required elements not found");
+            return;
+        }
+        
+        // Set initial progress bar width
+        progressBar.style.width = '0%';
+        
+        // Update progress bar every 0.1 seconds
+        var interval = setInterval(function() {
+            if (remainingTime <= 0) {
+                clearInterval(interval);
+                progressBar.style.width = '100%';
+                countdown.textContent = '0';
+                
+                // When the countdown ends, close the window
+                window.close();
+                
+                // As a fallback if window.close() doesn't work (which is common in modern browsers)
+                // Redirect to a blank page or display a final message
+                setTimeout(function() {
+                    document.body.innerHTML = "<div style='text-align:center; margin-top:100px;'><h1>The experiment has ended.</h1><p>You may now close this window.</p></div>";
+                }, 500);
+            } else {
+                remainingTime -= 0.1;
+                var progress = 100 - (remainingTime / waitTime * 100);
+                progressBar.style.width = progress + '%';
+                countdown.textContent = Math.ceil(remainingTime);
+            }
+        }, 100);
+    });
+</script>
+{{ endblock }}
