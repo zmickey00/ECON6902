@@ -39,10 +39,10 @@
         Experiment Instructions
     </div>
     <div class="card-body">
-        <h5 class="card-title">Welcome to the Investment Decision Experiment</h5>
+        <h5 class="card-title">Welcome to the Investment Decision Game</h5>
         
         <div class="instruction-section">
-            <p>In this experiment, you will make investment decisions over 20 rounds.</p>
+            <p>In this game, you will make investment decisions over 20 rounds.</p>
         </div>
         
         <div class="instruction-section">
@@ -62,7 +62,7 @@
             {% if high_frequency %}
             <p>You will see the stock price in every round.</p>
             {% else %}
-            <p>You will only see the stock price in rounds {{ disclosure_rounds_text }}.</p>
+            <p>You will only see the stock price in rounds {{ disclosure_rounds_text }}. Subsequently, you can only make investment decisions in these rounds too.</p>
             {% endif %}
         </div>
         
