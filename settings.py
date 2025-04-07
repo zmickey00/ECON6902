@@ -4,7 +4,7 @@ SESSION_CONFIGS = [
     dict(
         name='investment_decision',
         display_name="Investment Decision",
-        app_sequence=['investment_decision'],  # Replace 'game' with your app folder name
+        app_sequence=['consent','investment_decision'],  # Replace 'game' with your app folder name
         num_demo_participants=8,
         num_rounds=80,
     ),

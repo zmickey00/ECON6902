@@ -1,0 +1,120 @@
+{{ block title }}
+    Investment Decision Experiment: Instructions
+{{ endblock }}
+
+{{ block styles }}
+<style>
+    .otree-btn-next {
+        background-color: #004080 !important;
+        border-color: #004080 !important;
+        color: #e0e0e0 !important;
+    }
+
+    .otree-btn-next:hover {
+        background-color: #0055a5 !important;
+        border-color: #0055a5 !important;
+        color: #ffffff !important;
+    }
+
+    .card {
+        margin-top: 30px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .card-header {
+        font-size: 1.5em;
+        font-weight: bold;
+        background-color: #f7f7f7;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .instruction-section {
+        margin-bottom: 20px;
+    }
+
+    .wait-notice {
+        color: #dc3545;
+        font-weight: bold;
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    #countdown {
+        font-size: 1.2em;
+    }
+</style>
+{{ endblock }}
+
+{{ block content }}
+
+<div class="card instruction-card">
+    <div class="card-header">Experiment Instructions</div>
+    <div class="card-body">
+        <div class="instruction-section">
+            Thank you for being part of our study. This experiment is designed to examine how investors interpret and act upon price information when making financial decisions. You do not need to have any background in finance or prior experience with investing — just follow the instructions carefully and rely on your common sense to respond as best you can. In this page, there are some crucial instructions about the game. Reading and understanding them may increase your final compensation. We appreciate your time and effort in contributing to this research!
+        </div>
+
+        <div class="instruction-section">
+            <strong>Financial Market</strong><br>
+            In this experiment, you will play 4 individual games. The games are all the same except that they represent different fluctuations of the financial market.
+         To make things simple, these games use the <u>stock price</u> to represent the market's fluctuation. For example, if you have $2 invested and the price moves from $1 (this <u style="color: blue;">round</u>) to $1.3 (next <u style="color: blue;">round</u>), then you will have $2 × <sup>$1.3</sup>&frasl;<sub>$1</sub> = $2.6.
+            Your job is to make the most money in each game.
+        </div>
+
+        <div class="instruction-section">
+            <strong>Stock Price</strong><br>
+            The stock price in your games
+        </div>
+
+        <div class="instruction-section">
+            <strong>Individual Games</strong><br>
+            Each game consists of 20 <u style="color: blue;">rounds</u>. In each game, you will start with $10 of initial endowment. The <u>stock price</u> will be revealed to you in some of the rounds. <u style="color: red;"> In the rounds</u> that  you can see the <u>stock price</u>, you can choose to invest your money into the financial market, so that the amount you invested will grow or shrink with the financial market until the round you can see the stock price again. In those rounds where you do NOT see the price of the stock, you CANNOT make any investment decision. Moreover, in those rounds that you can see the stock prices so that you can make your investment decisions, we will pre-withdraw all of your previous investment and add them to your available balance.
+        </div>
+
+        <div class="instruction-section">
+            <strong>Your Compensation</strong><br>
+            At the end of each game, you will see how much your $10 grew. One game will be randomly selected and the amount you earned will be used for your compensation. To ensure fairness despite randomness, we will also add $5 to your final payment.
+        </div>
+
+
+        <p class="wait-notice">
+            Please read the instructions carefully.<br>
+            You can continue after <span id="countdown">60</span> seconds.
+        </p>
+    </div>
+</div>
+
+<div id="next-button" style="display:none; text-align:center; margin-top:20px;">
+    {{ next_button }}
+</div>
+
+{{ endblock }}
+
+{{ block scripts }}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var countdownElement = document.getElementById("countdown");
+        var nextButton = document.getElementById("next-button");
+        var timeLeft = 60;
+
+        var countdownTimer = setInterval(function () {
+            timeLeft -= 1;
+            countdownElement.textContent = timeLeft;
+
+            if (timeLeft <= 0) {
+                clearInterval(countdownTimer);
+                nextButton.style.display = "block";
+                countdownElement.parentElement.style.display = "none";
+            }
+        }, 1000);
+    });
+</script>
+{{ endblock }}
