@@ -46,11 +46,11 @@ class No_Consent(Page):
     def is_displayed(player):
         return player.consent == 0
 class Instructions(Page):
-
     pass
-
 class Results(Page):
     pass
+class Stock_Price_Display(Page):
+    pass
 
 
-page_sequence = [Consent, No_Consent]
+page_sequence = [Consent, No_Consent, Instructions, Stock_Price_Display]

@@ -94,27 +94,27 @@ for i in range(1, 7):
 
     # Left subplot: Underlying price (no noise)
     plt.subplot(1, 2, 1)
-    plt.plot(ticks, underlying_prices, marker='o', linestyle='-', label='Underlying Price')
-    plt.title("Underlying Price Evolution (No Noise)")
-    plt.xlabel("Tick")
+    plt.plot(ticks, underlying_prices, marker='o', linestyle='-', color='green', label='value')
+    plt.title("Value of the Stock")
+    plt.xlabel("Round")
     plt.ylabel("Price ($)")
     plt.grid(True)
     plt.legend()
 
     # Right subplot: Observed price (with noise)
     plt.subplot(1, 2, 2)
-    plt.plot(ticks, observed_prices, marker='o', linestyle='-', color='red', label='Observed Price')
+    plt.plot(ticks, observed_prices, marker='o', linestyle='-', color='black', label='stock price')
     # Mark opposite ticks (black dots)
-    if opposite_ticks:
-        plt.scatter(opposite_ticks, [observed_prices[t] for t in opposite_ticks],
-                    marker='o', color='black', s=100, label='Opposite Movement')
-    # Mark detectable (but not opposite) ticks (green dots)
-    if detectable_only:
-        plt.scatter(detectable_only, [observed_prices[t] for t in detectable_only],
-                    marker='o', color='green', s=100, label='Detectable Movement')
+    # if opposite_ticks:
+    #     plt.scatter(opposite_ticks, [observed_prices[t] for t in opposite_ticks],
+    #                 marker='o', color='black', s=100, label='Opposite Movement')
+    # # Mark detectable (but not opposite) ticks (green dots)
+    # if detectable_only:
+    #     plt.scatter(detectable_only, [observed_prices[t] for t in detectable_only],
+    #                 marker='o', color='green', s=100, label='Detectable Movement')
 
-    plt.title("Observed Price Evolution (With Noise)")
-    plt.xlabel("Tick")
+    plt.title("Price of the Stock")
+    plt.xlabel("Round")
     plt.ylabel("Price ($)")
     plt.grid(True)
     plt.legend()

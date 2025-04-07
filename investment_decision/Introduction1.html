@@ -1,7 +1,3 @@
-{{ block title }}
-    Investment Decision Experiment: Instructions
-{{ endblock }}
-
 {{ block styles }}
 <style>
     .otree-btn-next {
@@ -19,19 +15,15 @@
     .instruction-card {
         margin-bottom: 20px;
     }
-    
+
     .instruction-section {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
 
     .wait-notice {
         color: #dc3545;
         font-weight: bold;
         margin-top: 20px;
-    }
-
-    #countdown {
-        font-size: 1.2em;
     }
 </style>
 {{ endblock }}
@@ -40,57 +32,48 @@
 
 <div class="card instruction-card">
     <div class="card-header">
-        Experiment Instructions
+       Before Game 1
     </div>
     <div class="card-body">
+        <h5 class="card-title">Welcome to Game 1</h5>
+
         <div class="instruction-section">
-            Thank you for being part of our study. This experiment is designed to examine how investors interpret and act upon price information when making financial decisions. You do not need to have any background in finance or prior experience with investing — just follow the instructions carefully and rely on your common sense to respond as best you can. In this page, there are some crucial instructions about the game. Reading and understanding them may increase your final compensation. We appreciate your time and effort in contributing to this research!
+            <p>In this game, you will make investment decisions over 20 rounds.</p>
         </div>
 
         <div class="instruction-section">
-            <strong>Financial Market</strong><br>
-            In this experiment, you will play 4 individual games. The games are all the same except that they represent different fluctuations of the financial market.
-         To make things simple, these games use the <u>stock price</u> to represent the market's fluctuation. For example, if you have $2 invested and the price moves from $1 (this <u style="color: #004080;">round</u>) to $1.3 (next <u style="color: #004080;">round</u>), then you will have $2 × <sup>$1.3</sup>&frasl;<sub>$1</sub> = $2.6.
-            Your job is to make the most money in each game.
+            <p><strong>Basic Rules:</strong></p>
+            <ul>
+                <li>You will receive $10 of initial funds in the first round.</li>
+                <li>In those rounds that the price information is disclosed to you, you decide how much to invest in a stock based on price information.</li>
+                <li>The invested money will fluctuate with stock price changes.</li>
+                <li>Your remaining funds stay the same and carry over to the next round.</li>
+                <li>In the subsequent rounds where you can make an investment decision again, your available funds will consist of your previous round's remaining funds plus the current value of your previous investment that is automatically withdrawn.</li>
+                <li>At the end, your total return will be the sum of your remaining funds and the value of your stock holdings at the final price.</li>
+            </ul>
         </div>
 
+<!--        <div class="instruction-section">-->
+<!--            <p><strong>Information Disclosure:</strong></p>-->
+<!--            {% if high_frequency %}-->
+<!--            <p>You will see the stock price in every round.</p>-->
+<!--            {% else %}-->
+<!--            <p>You will only see the stock price in rounds {{ disclosure_rounds_text }}. Subsequently, you can only make investment decisions in these rounds too.</p>-->
+<!--            {% endif %}-->
+<!--        </div>-->
+
+<!--        <div class="instruction-section">-->
+<!--            <p><strong>Price Presentation:</strong></p>-->
+<!--            {% if visualized %}-->
+<!--            <p>You will see the visual stock prices.</p>-->
+<!--            {% else %}-->
+<!--            <p>You will see the numeric stock prices.</p>-->
+<!--            {% endif %}-->
+<!--        </div>-->
         <div class="instruction-section">
-            <strong>Stock Price</strong><br>
-            We try to mimic the price of a stock that has momentem 
+            <p><strong>You have read all the instructions. Once you press next, you will enter the main part of the experiment. Good luck!</strong></p>
         </div>
-
-        <div class="instruction-section">
-            <strong>Individual Games</strong><br>
-            Each game consists of 20 <u style="color: #004080;">rounds</u>. In each game, you will start with $10 of initial endowment. The <u>stock price</u> will be revealed to you in some of the rounds. <u style="color: #dc3545;"> In the rounds</u> that  you can see the <u>stock price</u>, you can choose to invest your money into the financial market, so that the amount you invested will grow or shrink with the financial market until the round you can see the stock price again. In those rounds where you do NOT see the price of the stock, you CANNOT make any investment decision. Moreover, in those rounds that you can see the stock prices so that you can make your investment decisions, we will pre-withdraw all of your previous investment and add them to your available balance.
-        </div>
-
-        <div class="instruction-section">
-            <strong>Your Compensation</strong><br>
-            At the end of each game, you will see how much your $10 grew. One game will be randomly selected and the amount you earned will be used for your compensation. To ensure fairness despite randomness, we will also add $5 to your final payment.
-        </div>
-
-        <div class="instruction-section">
-            <strong>Information Disclosure:</strong><br>
-            {% if high_frequency %}
-            <p>You will see the stock price in every round.</p>
-            {% else %}
-            <p>You will only see the stock price in rounds {{ disclosure_rounds_text }}. Subsequently, you can only make investment decisions in these rounds too.</p>
-            {% endif %}
-        </div>
-        
-        <div class="instruction-section">
-            <strong>Price Presentation:</strong><br>
-            {% if visualized %}
-            <p>You will see the visual stock prices.</p>
-            {% else %}
-            <p>You will see the numeric stock prices.</p>
-            {% endif %}
-        </div>
-
-
-        <p class="wait-notice">
-            Please read the instructions carefully. You can continue after <span id="countdown">60</span> seconds.
-        </p>
+        <p class="wait-notice">Please read these instructions carefully. The next button will appear after 20 seconds.</p>
     </div>
 </div>
 
@@ -102,21 +85,20 @@
 
 {{ block scripts }}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var countdownElement = document.getElementById("countdown");
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Page loaded, waiting for " + js_vars.wait_time + " seconds");
+
         var nextButton = document.getElementById("next-button");
-        var timeLeft = 60;
+        if (nextButton) {
+            nextButton.style.display = "none";
 
-        var countdownTimer = setInterval(function () {
-            timeLeft -= 1;
-            countdownElement.textContent = timeLeft;
-
-            if (timeLeft <= 0) {
-                clearInterval(countdownTimer);
+            setTimeout(function() {
+                console.log("Wait time completed, showing button");
                 nextButton.style.display = "block";
-                countdownElement.parentElement.style.display = "none";
-            }
-        }, 1000);
+            }, js_vars.wait_time * 1000);
+        } else {
+            console.error("Could not find next-button element");
+        }
     });
 </script>
 {{ endblock }}
