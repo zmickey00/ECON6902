@@ -46,14 +46,6 @@
         border-radius: 5px;
     }
     
-    .total-earnings-value {
-        font-size: 2rem;
-        font-weight: bold;
-        color: #28a745;
-        display: block;
-        margin: 10px 0;
-    }
-    
     .session-results {
         margin: 30px 0;
     }
@@ -66,15 +58,38 @@
         border-left: 4px solid #004080;
     }
     
+    .session-item.selected {
+        background-color: #f0fff0;
+        border-left: 4px solid #28a745;
+    }
+    
     .session-item h5 {
         margin-bottom: 10px;
         color: #004080;
+    }
+    
+    .session-item.selected h5 {
+        color: #28a745;
     }
     
     .completed-icon {
         font-size: 4rem;
         color: #28a745;
         margin-bottom: 20px;
+    }
+    
+    .selected-reward {
+        text-align: center;
+        margin: 20px 0;
+        padding: 15px;
+        background-color: #f0fff0;
+        border-radius: 5px;
+        border: 2px solid #28a745;
+    }
+    
+    .selected-reward h4 {
+        color: #28a745;
+        margin-bottom: 10px;
     }
 </style>
 {{ endblock }}
@@ -93,17 +108,17 @@
             <p>Your participation and decision-making have provided valuable data for our research.</p>
         </div>
         
-        <div class="total-earnings">
-            <h4>Your Average Earnings Across All Experiments:</h4>
-            <span class="total-earnings-value">${{ total_earnings }}</span>
+        <div class="selected-reward">
+            <h4>Your Reward</h4>
+            <p>One of your experiment earnings has been randomly selected as your reward.</p>
         </div>
         
         <div class="session-results">
             <h4>Results by Experiment:</h4>
             
             {% for result in session_results %}
-            <div class="session-item">
-                <h5>Experiment {{ result.session_num }}</h5>
+            <div class="session-item {% if forloop.counter == selected_session %}selected{% endif %}">
+                <h5>Experiment {{ result.session_num }} {% if forloop.counter == selected_session %}(Selected for Reward){% endif %}</h5>
                 <p><strong>Total Return:</strong> ${{ result.total_return }}</p>
             </div>
             {% endfor %}
@@ -113,4 +128,10 @@
 
 {{ next_button }}
 
+{{ endblock }}
+
+{{ block scripts }}
+<script>
+    // This script is not necessary for the modification, but kept for potential future use
+</script>
 {{ endblock }}

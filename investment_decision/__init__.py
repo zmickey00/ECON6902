@@ -518,7 +518,6 @@ class FinalPage(Page):
     @staticmethod
     def vars_for_template(player):
         # Calculate the total earnings across all sessions
-        total_earnings = 0
         session_results = []
         
         for session_num in range(1, Constants.num_sessions + 1):
@@ -535,16 +534,17 @@ class FinalPage(Page):
                 final_stock_value = session_player.stocks_purchased * final_stock_price
                 session_return = float(session_player.remaining_funds) + final_stock_value
                 
-                total_earnings += session_return
-                
                 session_results.append({
                     'session_num': session_num,
                     'total_return': f"{session_return:.2f}"
                 })
         
+        # Randomly select one session for the reward
+        selected_session = random.randint(1, Constants.num_sessions)
+        
         return {
             'session_results': session_results,
-            'average_earnings': f"{total_earnings/4:.2f}"
+            'selected_session': selected_session
         }
 
 
