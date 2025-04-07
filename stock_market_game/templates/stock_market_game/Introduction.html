@@ -1,0 +1,41 @@
+{{ block title }}
+    Welcome to the Stock Market Investment Game
+{{ endblock }}
+
+{{ block content }}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h3>Game Instructions</h3>
+        </div>
+        <div class="card-body">
+            <p>Welcome to the Stock Market Investment Game. Here's how it works:</p>
+            
+            <h4>Game Rules:</h4>
+            <ul>
+                <li>You will play 4 rounds</li>
+                <li>In each round, you start with ${{ Constants.initial_balance }} cash balance</li>
+                <li>Each round has 20 ticks, representing time periods</li>
+                <li>At each tick, you can invest money in the stock market or withdraw from your investment</li>
+                <li>The money you invest will fluctuate with the stock price</li>
+                <li>Your money not invested will remain stable in your cash balance</li>
+            </ul>
+            
+            <h4>How to Play:</h4>
+            <ul>
+                <li>Enter a positive number to move money from your balance to investment</li>
+                <li>Enter a negative number to withdraw money from your investment</li>
+                <li>You have 60 seconds to make each decision</li>
+                <li>If you don't make a decision in time, no change will be made</li>
+                <li>Your final payoff for each round is the sum of your cash balance and investment value</li>
+            </ul>
+            
+            <div class="alert alert-info">
+                <p>Are you ready to begin? Click "Next" to start the first round.</p>
+            </div>
+            
+            {{ next_button }}
+        </div>
+    </div>
+</div>
+{{ endblock }}

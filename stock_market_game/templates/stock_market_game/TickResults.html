@@ -1,0 +1,16 @@
+{% extends "global/Page.html" %}
+{% load otree_tags %}
+{% block title %}
+    Tick Results - Tick {{ tick }}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h4>Tick Results</h4>
+    <p>Tick: {{ tick }}</p>
+    <p>Current Balance: ${{ balance }}</p>
+    <p>Investment: ${{ investment }}</p>
+    <p>Current Stock Price: ${{ current_price }}</p>
+    {{ next_button }}
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% block title %}
+    Investment Decision - Tick {{ tick }} of {{ Constants.ticks_per_round }}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Game Round {{ game_round }} of {{ total_game_rounds }}</h4>
+            <h5>Tick {{ tick }} of {{ Constants.ticks_per_round }}</h5>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col">
+                    <h5>Current Stock Price: ${{ current_price }}</h5>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h5 class="card-title">Your Accounts</h5>
+                            <p><strong>Cash Balance:</strong> ${{ balance }}</p>
+                            <p><strong>Invested Money:</strong> ${{ investment }}</p>
+                            <p><strong>Total Value:</strong> ${{ total_value }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="alert alert-info">
+                        <span>You have <span id="time-remaining">{{ time_limit }}</span> seconds to make your decision.</span>
+                    </div>
+                </div>
+            </div>
+            {{ formfields }}
+            <div class="form-text mb-4">
+                <p>Enter a positive number to invest more money from your balance.</p>
+                <p>Enter a negative number to withdraw money from your investment.</p>
+                <p>Enter 0 to make no changes.</p>
+            </div>
+            {{ next_button }}
+        </div>
+    </div>
+</div>
+
+<script>
+    var timeRemaining = {{ time_limit }};
+    var timerId = setInterval(countdown, 1000);
+    function countdown() {
+        timeRemaining--;
+        document.getElementById('time-remaining').textContent = timeRemaining;
+        if (timeRemaining <= 10) {
+            document.getElementById('time-remaining').style.color = 'red';
+        }
+        if (timeRemaining <= 0) {
+            clearInterval(timerId);
+            document.getElementById('form').submit();
+        }
+    }
+</script>
+{% endblock %}

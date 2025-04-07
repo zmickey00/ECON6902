@@ -1,0 +1,29 @@
+{{ block title }}
+    Experiment Complete
+{{ endblock }}
+
+{{ block content }}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h3>Game Complete - Thank You!</h3>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-success mb-4">
+                <h4>You have completed all {{ total_rounds }} rounds of the stock market game.</h4>
+            </div>
+            
+            <div class="card bg-light mb-4">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Your Total Earnings</h5>
+                    <h2>${{ total_payoff }}</h2>
+                </div>
+            </div>
+            
+            <p>Thank you for participating in this experiment. Your decisions have been recorded.</p>
+            
+            {{ next_button }}
+        </div>
+    </div>
+</div>
+{{ endblock }}

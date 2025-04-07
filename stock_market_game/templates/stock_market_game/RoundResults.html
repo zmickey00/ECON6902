@@ -1,0 +1,44 @@
+{{ block title }}
+    Round {{ player.round_number }} Results
+{{ endblock }}
+
+{{ block content }}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h3>Round {{ player.round_number }} Results</h3>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-success mb-4">
+                <h4>Final Stock Price: ${{ final_price }}</h4>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card bg-light mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Your Final Accounts</h5>
+                            <p><strong>Cash Balance:</strong> ${{ balance }}</p>
+                            <p><strong>Investment Value:</strong> ${{ investment }}</p>
+                            <hr>
+                            <h5><strong>Total Round Payoff:</strong> ${{ round_payoff }}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {% if player.round_number < 4 %}
+                <div class="alert alert-info">
+                    <p>Get ready for Round {{ player.round_number|add:1 }}!</p>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <p>This was your final round. Click "Next" to see your total earnings.</p>
+                </div>
+            {% endif %}
+            
+            {{ next_button }}
+        </div>
+    </div>
+</div>
+{{ endblock }}
