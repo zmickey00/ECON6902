@@ -41,9 +41,12 @@ noise_probs = [0.20, 0.20, 0.20, 0.20, 0.10, 0.10]
 '''
 
 # Truncated normal distribution
-a, b = -0.05, 0.05
-mu, sigma = 0, 1
-trunc_dist = truncnorm(a, b, loc=mu, scale=sigma)
+loc = 0
+scale = 0.05
+L, U = -0.06, 0.06
+
+a, b = (L - loc) / scale, (U - loc) / scale
+trunc_dist = truncnorm(a, b, loc, scale)
 
 samples = trunc_dist.rvs(5000)
 
